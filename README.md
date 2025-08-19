@@ -140,16 +140,19 @@ pnpm lint
 ## 🌐 URLs del Ecosistema
 
 - **Cliente Web**: http://localhost:3000
-- **Backend API**: http://localhost:3001
+- **Backend API (Railway)**: https://web-production-927f.up.railway.app
 - **Panel Admin**: http://localhost:5173
 - **App Móvil**: https://v0-jaguar-express-design.vercel.app/
 - **Prisma Studio**: http://localhost:5555
+
+> Para desarrollo local puedes usar `http://localhost:3001` o configurar la variable de entorno `NEXT_PUBLIC_API_URL` con la URL que necesites.
 
 ## 📝 Documentación Adicional
 
 - [📋 Documento de Requerimientos (PRD)](.trae/documents/jaguar-express-prd.md)
 - [🏗️ Arquitectura Técnica](.trae/documents/jaguar-express-arquitectura-tecnica.md)
-- [🔗 API Documentation](http://localhost:3001/docs) (cuando el servidor esté ejecutándose)
+- [🔗 API Documentation](https://web-production-927f.up.railway.app/docs) (servidor en Railway)
+- [🔗 API Documentation (local)](http://localhost:3001/docs)
 
 ## 🤝 Contribución
 

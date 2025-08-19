@@ -428,4 +428,26 @@ export function validatePassword(password: string): {
 }
 
 // Generar contraseña aleatoria
-export function generatePassword(length: number = 12
+export function generatePassword(length: number = 12): string {
+  const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+  const numbers = '0123456789';
+  const symbols = '!@#$%^&*()_+[]{}|;:,.<>?';
+  const allChars = uppercase + lowercase + numbers + symbols;
+
+  if (length < 4) length = 4;
+
+  const passwordChars: string[] = [
+    uppercase[Math.floor(Math.random() * uppercase.length)],
+    lowercase[Math.floor(Math.random() * lowercase.length)],
+    numbers[Math.floor(Math.random() * numbers.length)],
+    symbols[Math.floor(Math.random() * symbols.length)],
+  ];
+
+  for (let i = passwordChars.length; i < length; i++) {
+    const chars = allChars;
+    passwordChars.push(chars[Math.floor(Math.random() * chars.length)]);
+  }
+
+  return passwordChars.sort(() => Math.random() - 0.5).join('');
+}

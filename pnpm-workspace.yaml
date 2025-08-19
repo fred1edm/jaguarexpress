@@ -1,0 +1,5 @@
+packages:
+  - 'jaguar-express'
+  - 'jaguar-express-backend'
+  - 'jaguar-express-admin'
+  - 'jaguar-express-webview'

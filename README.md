@@ -12,123 +12,59 @@ Jaguar Express es un ecosistema completo de plataformas de delivery que incluye:
 
 ## 🏗️ Arquitectura del Ecosistema
 
-El proyecto está conformado por **4 componentes independientes** que trabajan en conjunto:
+El monorepo se organiza en **4 módulos principales**:
 
-### 1. 🔧 Backend API REST
-- **Framework**: Fastify + TypeScript
-- **Base de datos**: PostgreSQL + Prisma ORM
-- **Autenticación**: JWT + bcrypt
-- **Documentación**: Swagger/OpenAPI
-
-### 2. 🧑‍💻 App Cliente Web
-- **Framework**: Next.js 14 + TypeScript
-- **Estilos**: TailwindCSS
-- **Estado**: Zustand
-- **Consultas**: Axios
-
-### 3. 📱 App Móvil WebView
-- **Framework**: Flutter
-- **WebView**: webview_flutter
-- **URL**: https://v0-jaguar-express-design.vercel.app/
-
-### 4. 🛠️ Panel Administrativo
-- **Framework**: React + TypeScript
-- **UI**: Shadcn/ui + Radix UI
-- **Estado**: Zustand
-- **Consultas**: TanStack React Query
+1. 🔧 **jaguar-express-backend** – API REST con Fastify + TypeScript *(pendiente)*  
+2. 🧑‍💻 **jaguar-express** – Aplicación web en Next.js 14 + TailwindCSS *(implementado)*  
+3. 📱 **jaguar-express-webview** – Contenedor móvil Flutter que carga la app web en un WebView *(placeholder)*  
+4. 🛠️ **jaguar-express-admin** – Panel administrativo en React + Vite *(pendiente)*
 
 ## 📁 Estructura del Proyecto
 
 ```
 jaguarexpress/
-├── 📁 backend/              # Módulos del backend por dominio
-│   ├── auth/               # Autenticación JWT
-│   ├── negocios/           # Gestión de negocios
-│   ├── productos/          # Gestión de productos
-│   ├── pedidos/            # Gestión de pedidos
-│   ├── repartidores/       # Gestión de repartidores
-│   ├── configuracion/      # Configuración global
-│   ├── middleware/         # Middlewares de Fastify
-│   ├── types/              # Tipos TypeScript
-│   └── utils/              # Utilidades
-├── 📁 cliente-web/         # App cliente Next.js
-├── 📁 panel-admin/         # Panel administrativo React
-├── 📁 app-movil/           # App móvil Flutter
-├── 📁 database/            # Scripts de base de datos
-├── 📁 prisma/              # Esquemas y migraciones
-├── 📁 api/                 # Servidor Fastify
-└── 📁 src/                 # Frontend React base
+├── jaguar-express/          # App web Next.js (implementado)
+├── jaguar-express-webview/  # Contenedor Flutter WebView (placeholder)
+├── jaguar-express-admin/    # Panel administrativo React (pendiente)
+├── jaguar-express-backend/  # API REST Fastify (pendiente)
+├── node_modules/            # Dependencias del monorepo
+├── package.json
+└── pnpm-workspace.yaml
 ```
 
-## 🚀 Instalación y Configuración
+## 🚀 Instalación y Ejecución
 
 ### Prerrequisitos
-- Node.js 20+ 
-- PostgreSQL 15+
-- pnpm (recomendado) o npm
+- Node.js 20+
+- pnpm (recomendado)
 
-### 1. Clonar e instalar dependencias
+### Clonar e instalar dependencias
 ```bash
 git clone <repository-url>
 cd jaguarexpress
 pnpm install
 ```
 
-### 2. Configurar base de datos
+### Ejecutar la app web
 ```bash
-# Crear base de datos PostgreSQL
-createdb jaguarexpress
-
-# Configurar variables de entorno
-cp .env.example .env
-# Editar .env con tus credenciales de PostgreSQL
+pnpm client:dev
 ```
+La aplicación web estará disponible en [http://localhost:3000](http://localhost:3000).
 
-### 3. Configurar Prisma
-```bash
-# Generar cliente de Prisma
-pnpm db:generate
-
-# Aplicar esquema a la base de datos
-pnpm db:push
-
-# Opcional: Poblar con datos de ejemplo
-pnpm db:seed
-```
+La aplicación móvil se implementará como un contenedor Flutter que muestra esta app en un WebView, por lo que no requiere configuración adicional mientras la app web esté en ejecución.
 
 ## 🎯 Scripts Disponibles
 
 ### Desarrollo
 ```bash
-# Ejecutar todo el ecosistema
-pnpm ecosystem:dev
-
-# Solo cliente web
+# Ejecutar la app web
 pnpm client:dev
 
-# Solo backend API
+# Panel administrativo (pendiente)
+pnpm admin:dev
+
+# Backend API (pendiente)
 pnpm backend:dev
-
-# Configuración inicial completa
-pnpm setup
-```
-
-### Base de datos
-```bash
-# Generar cliente Prisma
-pnpm db:generate
-
-# Aplicar cambios al esquema
-pnpm db:push
-
-# Crear migración
-pnpm db:migrate
-
-# Abrir Prisma Studio
-pnpm db:studio
-
-# Poblar base de datos
-pnpm db:seed
 ```
 
 ### Producción

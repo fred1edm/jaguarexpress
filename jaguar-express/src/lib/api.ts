@@ -15,6 +15,8 @@ import {
 } from '@/types';
 
 // Configuración base de la API
+// Para producción define NEXT_PUBLIC_API_URL con la URL del backend (ej. Railway:
+// https://web-production-927f.up.railway.app); en desarrollo usa http://localhost:3001.
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 // Crear instancia de axios

@@ -12,6 +12,8 @@ const nextConfig = {
     formats: ['image/webp', 'image/avif'],
   },
   env: {
+    // Cambia esta URL mediante NEXT_PUBLIC_API_URL para apuntar al backend en producción.
+    // Ejemplo de Railway: https://web-production-927f.up.railway.app
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
     NEXT_PUBLIC_APP_NAME: 'Jaguar Express',
     NEXT_PUBLIC_APP_VERSION: '1.0.0',

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { User, CartItem, Negocio, Producto, Pedido } from '@/types';
+import { User, CartItem, Negocio, Producto, Pedido, RegisterData } from '@/types';
 import { authApi } from '@/lib/api';
 import { toast } from 'react-hot-toast';
 
@@ -11,7 +11,7 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (data: any) => Promise<void>;
+  register: (data: RegisterData) => Promise<void>;
   logout: () => void;
   updateProfile: (data: Partial<User>) => Promise<void>;
   checkAuth: () => Promise<void>;
@@ -19,97 +19,91 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set, get) => ({
-      user: null,
-      token: null,
-      isAuthenticated: false,
-      isLoading: false,
+    (set, get) => {
+      const setAuthSession = (data: { user: User; token: string }) => {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
 
-      login: async (email: string, password: string) => {
-        try {
-          set({ isLoading: true });
-          const response = await authApi.login({ email, password });
-          
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('user', JSON.stringify(response.user));
-          
-          set({
-            user: response.user,
-            token: response.token,
-            isAuthenticated: true,
-            isLoading: false,
-          });
-          
-          toast.success('¡Bienvenido!');
-        } catch (error: any) {
-          set({ isLoading: false });
-          throw error;
-        }
-      },
-
-      register: async (data: any) => {
-        try {
-          set({ isLoading: true });
-          const response = await authApi.register(data);
-          
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('user', JSON.stringify(response.user));
-          
-          set({
-            user: response.user,
-            token: response.token,
-            isAuthenticated: true,
-            isLoading: false,
-          });
-          
-          toast.success('¡Cuenta creada exitosamente!');
-        } catch (error: any) {
-          set({ isLoading: false });
-          throw error;
-        }
-      },
-
-      logout: () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
         set({
-          user: null,
-          token: null,
-          isAuthenticated: false,
+          user: data.user,
+          token: data.token,
+          isAuthenticated: true,
+          isLoading: false,
         });
-        toast.success('Sesión cerrada');
-      },
+      };
 
-      updateProfile: async (data: Partial<User>) => {
-        try {
-          const updatedUser = await authApi.updateProfile(data);
-          set({ user: updatedUser });
-          localStorage.setItem('user', JSON.stringify(updatedUser));
-          toast.success('Perfil actualizado');
-        } catch (error: any) {
-          throw error;
-        }
-      },
+      return {
+        user: null,
+        token: null,
+        isAuthenticated: false,
+        isLoading: false,
 
-      checkAuth: async () => {
-        const token = localStorage.getItem('token');
-        const userStr = localStorage.getItem('user');
-        
-        if (token && userStr) {
+        login: async (email: string, password: string) => {
           try {
-            const user = JSON.parse(userStr);
-            set({
-              user,
-              token,
-              isAuthenticated: true,
-            });
-          } catch (error) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
+            set({ isLoading: true });
+            const response = await authApi.login({ email, password });
+            setAuthSession(response);
+            toast.success('¡Bienvenido!');
+          } catch (error: any) {
+            set({ isLoading: false });
+            throw error;
           }
-        }
-      },
-    }),
+        },
+
+        register: async (data: RegisterData) => {
+          try {
+            set({ isLoading: true });
+            const response = await authApi.register(data);
+            setAuthSession(response);
+            toast.success('¡Cuenta creada exitosamente!');
+          } catch (error: any) {
+            set({ isLoading: false });
+            throw error;
+          }
+        },
+
+        logout: () => {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          set({
+            user: null,
+            token: null,
+            isAuthenticated: false,
+          });
+          toast.success('Sesión cerrada');
+        },
+
+        updateProfile: async (data: Partial<User>) => {
+          try {
+            const updatedUser = await authApi.updateProfile(data);
+            set({ user: updatedUser });
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+            toast.success('Perfil actualizado');
+          } catch (error: any) {
+            throw error;
+          }
+        },
+
+        checkAuth: async () => {
+          const token = localStorage.getItem('token');
+          const userStr = localStorage.getItem('user');
+
+          if (token && userStr) {
+            try {
+              const user = JSON.parse(userStr);
+              set({
+                user,
+                token,
+                isAuthenticated: true,
+              });
+            } catch (error) {
+              localStorage.removeItem('token');
+              localStorage.removeItem('user');
+            }
+          }
+        },
+      };
+    },
     {
       name: 'auth-storage',
       partialize: (state) => ({

@@ -25,7 +25,11 @@ export function formatNumber(num: number): string {
 // Formateo de fechas
 export function formatDate(date: string | Date, options?: Intl.DateTimeFormatOptions): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
-  
+
+  if (isNaN(dateObj.getTime())) {
+    return 'Fecha inválida';
+  }
+
   const defaultOptions: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
